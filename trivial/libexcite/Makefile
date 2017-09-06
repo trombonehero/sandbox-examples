@@ -1,4 +1,4 @@
-CFLAGS=	-Weverything -fPIC -I ../include
+CFLAGS=	-Wall -std=c99 -fPIC -I ../include
 
 all: libexcite.so
 
