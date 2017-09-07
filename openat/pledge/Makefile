@@ -1,4 +1,4 @@
-CFLAGS=		-Wall -I ../include
+CFLAGS=		-g -Wall -I ../include
 LDFLAGS=	-L ../libconfparse
 
 all: do_stuff

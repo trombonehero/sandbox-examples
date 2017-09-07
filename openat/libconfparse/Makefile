@@ -1,4 +1,4 @@
-CFLAGS=	-Wall -std=c99 -fPIC -I ../include
+CFLAGS=	-g -Wall -std=c99 -fPIC -I ../include
 
 all: libconfparse.so
 

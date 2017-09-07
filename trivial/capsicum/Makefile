@@ -1,4 +1,4 @@
-CFLAGS=		-Weverything -I ../include
+CFLAGS=		-g -Weverything -I ../include
 LDFLAGS=	-L ../libexcite
 
 all: excite
