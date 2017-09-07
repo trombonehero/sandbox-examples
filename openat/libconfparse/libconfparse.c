@@ -223,6 +223,8 @@ interpret_config(const struct config *c, int scratch_dir)
 			if (openat(scratch_dir, s->arg,
 				O_CREAT | O_EXCL | O_EXLOCK) < 0)
 			{
+				fprintf(stderr, "failed to open '%s'", s->arg);
+				perror(": ");
 				return false;
 			}
 			break;
