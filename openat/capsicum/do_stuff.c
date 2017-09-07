@@ -43,18 +43,36 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
+	// Open read-only config directory
 	int config_dir = open(argv[1], O_DIRECTORY);
 	if (config_dir < 0)
 	{
 		err(-1, "error opening config dir '%s'", argv[1]);
 	}
 
+	cap_rights_t rights;
+	cap_rights_init(&rights, CAP_FLOCK, CAP_FSTAT, CAP_LOOKUP, CAP_MMAP,
+		CAP_READ, CAP_SEEK);
+	if (cap_rights_limit(config_dir, &rights) < 0)
+	{
+		err(-1, "error limiting rights on config directory");
+	}
+
+	// Open writable scratch directory
 	int scratch_dir = open(argv[2], O_DIRECTORY);
 	if (scratch_dir < 0)
 	{
 		err(-1, "error opening scratch dir '%s'", argv[1]);
 	}
 
+	cap_rights_init(&rights, CAP_CREATE, CAP_FLOCK, CAP_FSTAT, CAP_LOOKUP,
+		CAP_MMAP, CAP_READ, CAP_SEEK);
+	if (cap_rights_limit(scratch_dir, &rights) < 0)
+	{
+		err(-1, "error limiting rights on config directory");
+	}
+
+	// Enter sandbox!
 	if (cap_enter() < 0)
 	{
 		err(-1, "error in cap_enter()");
