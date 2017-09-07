@@ -42,29 +42,46 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
+	// Open read-only config directory
 	int config_dir = open(argv[1], O_DIRECTORY);
 	if (config_dir < 0)
 	{
 		err(-1, "error opening config dir '%s'", argv[1]);
 	}
 
-	int scratch_dir = open(argv[1], O_DIRECTORY);
+	// Open writable scratch directory
+	int scratch_dir = open(argv[2], O_DIRECTORY);
 	if (scratch_dir < 0)
 	{
 		err(-1, "error opening scratch dir '%s'", argv[1]);
 	}
 
-	/*
-	if (pledge("stdio", NULL) < 0)
+	// Enter sandbox!
+	if (pledge("stdio rpath cpath flock", NULL) < 0)
 	{
 		err(-1, "error in pledge()");
 	}
-	*/
 
-	struct config *conf = parse_program(config_dir, scratch_dir);
+	// Or we could've whitelisted a few specific paths
+	// (assuming we know them all in advance).
+	const char *paths[] =
+	{
+		"foo.lock",
+		"bar.lock!",
+		NULL,
+	};
+
+	// Parse config file(s)
+	const struct config *conf = parse_config(config_dir);
 	if (conf == NULL)
 	{
 		errx(-1, "error parsing configuration file(s)");
+	}
+
+	// Interpret "configuration"
+	if (!interpret_config(conf, scratch_dir))
+	{
+		errx(-1, "error interpreting configuration file");
 	}
 
 	return 0;
