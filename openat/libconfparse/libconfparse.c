@@ -33,7 +33,7 @@
 
 
 const struct config*
-parse_program(int config_dir, int scratch_dir)
+parse_config(int config_dir, int scratch_dir)
 {
 	size_t statement_count = 0;
 	size_t statement_capacity = 16;
