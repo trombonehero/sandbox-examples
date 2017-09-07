@@ -11,7 +11,8 @@ do_stuff: do_stuff.o ../libconfparse/libconfparse.so
 
 run: do_stuff
 	@rm -f p0wn*
-	ktrace -di ./do_stuff ../conf `mktemp -d scratch.XXXXXX`
+	ktrace -di ./do_stuff ../conf `mktemp -d scratch.XXXXXX` \
+		|| kdump | grep 'operation requires'
 
 clean:
 	rm -rf do_stuff *.o p0wn* scratch.*
