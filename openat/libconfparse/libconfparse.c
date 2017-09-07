@@ -27,6 +27,8 @@
  */
 
 #include <assert.h>
+#include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include <libconfparse.h>
@@ -41,4 +43,30 @@ parse_config(int config_dir, int scratch_dir)
 		calloc(statement_capacity, sizeof(struct statement));
 
 	return NULL;
+}
+
+
+bool
+interpret_config(const struct config *c, int scratch_dir)
+{
+	for (size_t i = 0; i < c->length; i++)
+	{
+		const struct statement *s = c->statements + i;
+
+		switch (s->instruction)
+		{
+		case make_lockfile:
+			if (openat(scratch_dir, s->arg,
+				O_CREAT | O_EXCL | O_EXLOCK) < 0)
+			{
+				return false;
+			}
+			break;
+		case print:
+			printf("%s\n", s->arg);
+			break;
+		}
+	}
+
+	return true;
 }

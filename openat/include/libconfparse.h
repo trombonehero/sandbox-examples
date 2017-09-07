@@ -26,6 +26,7 @@
  * SUCH DAMAGE.
  */
 
+#include <stdbool.h>
 #include <unistd.h>
 
 /*
@@ -82,5 +83,15 @@ typedef struct statement
  * @returns  a config object (caller responsible for freeing) or NULL on error
  */
 const struct config* parse_config(int config_dir, int scratch_dir);
+
+/**
+ * Execute a "configuration".
+ *
+ * @param    c              configuration "data"
+ * @param    scratch_dir    descriptor for scratch directory
+ *
+ * @returns  whether or not the interpretation was successful
+ */
+bool interpret_config(const struct config *c, int scratch_dir);
 
 __END_DECLS
