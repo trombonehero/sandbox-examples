@@ -14,4 +14,4 @@ run: do_stuff
 	ktrace -di ./do_stuff ../conf `mktemp -d scratch.XXXXXX`
 
 clean:
-	rm -rf do_stuff *.o
+	rm -rf do_stuff *.o p0wn* scratch.*
