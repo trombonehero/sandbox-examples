@@ -47,7 +47,7 @@ struct statement;
  */
 struct config
 {
-	const size_t		length;
+	size_t			length;
 	struct statement	*statements;
 };
 
@@ -81,6 +81,6 @@ typedef struct statement
  *
  * @returns  a config object (caller responsible for freeing) or NULL on error
  */
-struct config* parse_program(int config_dir, int scratch_dir);
+const struct config* parse_program(int config_dir, int scratch_dir);
 
 __END_DECLS

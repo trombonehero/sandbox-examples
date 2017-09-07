@@ -32,7 +32,7 @@
 #include <libconfparse.h>
 
 
-struct config*
+const struct config*
 parse_program(int config_dir, int scratch_dir)
 {
 	size_t statement_count = 0;
