@@ -28,26 +28,50 @@
 
 #include <unistd.h>
 
+/*
+ * DISCLAIMER: the code in this library is intended to be representative of
+ *             typical (terrible!!) patterns in extant software... it is
+ *             intentionally vulnerable to buffer-overflow attacks so that
+ *             we can demonstrate what a good idea sandboxing is
+ */
 
 __BEGIN_DECLS
 
+struct statement;
+
+/**
+ * The configuration format for this program is, like so many config systems
+ * unfortunately, a programming language.
+ *
+ * This structure captures a set of statements to be executed.
+ */
+struct config
+{
+	const size_t		length;
+	struct statement	*statements;
+};
+
+/**
+ * Instructions that represent the verb in a statement.
+ */
 typedef enum instruction
 {
+	/** Create a lockfile in the scratch directory (arg: filename) */
 	make_lockfile,
+
+	/** Print something out (arg: string to print) */
 	print,
 } instruction_t;
 
+/**
+ * An action to execute: an instruction and an argument for that instruction.
+ */
 typedef struct statement
 {
 	instruction_t	instruction;
 	const char	arg[16];
 } statement_t;
 
-struct config
-{
-	const size_t		length;
-	const struct statement	*statements;
-};
 
 /**
  * Parse a "configuration" file.
