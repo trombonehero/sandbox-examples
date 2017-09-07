@@ -70,7 +70,7 @@ typedef enum instruction
 typedef struct statement
 {
 	instruction_t	instruction;
-	const char	arg[16];
+	char		arg[16];
 } statement_t;
 
 
