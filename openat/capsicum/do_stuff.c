@@ -78,12 +78,14 @@ int main(int argc, char *argv[])
 		err(-1, "error in cap_enter()");
 	}
 
+	// Parse config file(s)
 	const struct config *conf = parse_config(config_dir);
 	if (conf == NULL)
 	{
 		errx(-1, "error parsing configuration file(s)");
 	}
 
+	// Interpret "configuration"
 	if (!interpret_config(conf, scratch_dir))
 	{
 		errx(-1, "error interpreting configuration file");
