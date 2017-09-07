@@ -15,4 +15,4 @@ run: do_stuff
 		|| kdump | grep 'operation requires'
 
 clean:
-	rm -rf do_stuff *.o p0wn* scratch.*
+	rm -rf do_stuff ktrace.out *.o p0wn* scratch.*
