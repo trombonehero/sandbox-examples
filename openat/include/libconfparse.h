@@ -82,7 +82,7 @@ typedef struct statement
  *
  * @returns  a config object (caller responsible for freeing) or NULL on error
  */
-const struct config* parse_config(int config_dir, int scratch_dir);
+const struct config* parse_config(int config_dir);
 
 /**
  * Execute a "configuration".
