@@ -29,6 +29,16 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 
+#ifdef __linux__
+#define __USE_ATFILE
+#define __USE_MISC
+
+#define	O_EXLOCK	0
+#define	O_SHLOCK	0
+
+#include <bsd/string.h>
+#endif
+
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
