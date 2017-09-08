@@ -77,17 +77,17 @@ int main(int argc, char *argv[])
 		BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_##syscall, 0, 1), \
 		BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW)
 
+	static const size_t SYSCALL_NUM_OFFSET =
+		offsetof(struct seccomp_data, nr);
+
 	struct sock_filter filter[] = {
-		/* validate arch */
+		// Check architecture: syscall numbers arch-dependent!
 		BPF_STMT(BPF_LD+BPF_W+BPF_ABS, ArchField),
 		BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, AUDIT_ARCH_X86_64, 1, 0),
 		BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_KILL),
 
-		/* load syscall */
-		BPF_STMT(BPF_LD+BPF_W+BPF_ABS,
-		         offsetof(struct seccomp_data, nr)),
-
-		/* list of allowed syscalls */
+		// Check syscall:
+		BPF_STMT(BPF_LD+BPF_W+BPF_ABS, SYSCALL_NUM_OFFSET),
 		Allow(brk),            // allow stack extension
 		Allow(close),          // allow closing files!
 		Allow(exit_group),     // called on exit(3)
@@ -96,9 +96,7 @@ int main(int argc, char *argv[])
 		Allow(munmap),         // we also unmap things
 		Allow(openat),         // to permit openat(config_dir), etc.
 		Allow(write),          // we write(2) to stdout
-
-		/* and if we don't match above, die */
-		BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_TRAP),
+		BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_TRAP),      // or die!
 	};
 	struct sock_fprog filterprog = {
 		.len = sizeof(filter)/sizeof(filter[0]),
