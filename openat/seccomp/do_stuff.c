@@ -95,7 +95,6 @@ int main(int argc, char *argv[])
 		Allow(mmap),           // we map config files when reading
 		Allow(munmap),         // we also unmap things
 		Allow(openat),         // to permit openat(config_dir), etc.
-		Allow(prctl),          // to continue seccomp'ing things
 		Allow(write),          // we write(2) to stdout
 
 		/* and if we don't match above, die */
